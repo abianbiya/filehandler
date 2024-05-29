@@ -37,11 +37,13 @@ trait InteractsWithFile
 		return [true, "It's OK."];
 	}
 
-	public function hasFile()
+	public function hasFile($folder = null)
 	{
-		$this->mediaFile = app(MediaFile::class);
-		return $this->loadCount('files')->files_count > 0;
-		// return MediaFile::whereModelType(get_class($this))->whereModelId($this->getKey())->count() > 0;
+		if($folder){
+			$this->loadMissing('files')->files->contains('folder', $folder);
+		}else{
+			return $this->loadCount('files')->files_count > 0;
+		}
 	}
 
 	public function replace()
